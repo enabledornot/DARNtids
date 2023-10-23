@@ -63,10 +63,10 @@ for year in years:
 #    dct['fovModel']                 = 'HALF_SLANT'
     dct['fovModel']                 = 'GS'
     dct['radars']                   = radars
-    dct['list_sDate']               = datetime.datetime(year,  11,1)
-    dct['list_eDate']               = datetime.datetime(year+1, 5,1)
-#    dct['list_sDate']               = datetime.datetime(2012,12,1)
-#    dct['list_eDate']               = datetime.datetime(2012,12,15)
+    # dct['list_sDate']               = datetime.datetime(year,  11,1)
+    # dct['list_eDate']               = datetime.datetime(year+1, 5,1)
+   dct['list_sDate']               = datetime.datetime(2012,12,1)
+   dct['list_eDate']               = datetime.datetime(2012,12,15)
     dct['hanning_window_space']     = False # Set to False for MSTID Index Calculation
     dct['bad_range_km']             = None  # Set to None for MSTID Index Calculation
     #dct['mongo_port']              = mongo_port
