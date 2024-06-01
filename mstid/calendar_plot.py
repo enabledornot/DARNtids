@@ -61,7 +61,13 @@ def get_y_coords(ut_time,st_uts,radar,radars):
 def get_coords(radar,win_sDate,radars,sDate,eDate,st_uts,verts=True):
     # Y-coordinate.
     x1  = float(get_x_coords(win_sDate,sDate,eDate))
-    y1  = float(get_y_coords(win_sDate.hour,st_uts,radar,radars))
+    pre_float = get_y_coords(win_sDate.hour,st_uts,radar,radars)
+    try:
+        y1  = float(pre_float)
+    except:
+        print("get_y_coords floating point error on radar {}. Just picking the first element in the array".format(radar))
+        y1 = float(pre_float[0])
+        # import ipdb; ipdb.set_trace()
 
     if verts:
 #        x1,y1   = x1+0,y1+0

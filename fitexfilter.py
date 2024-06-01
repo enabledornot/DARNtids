@@ -83,24 +83,30 @@ def despeckle(tbp):
     cmd = 'bzcat {!s} > {!s}'.format(file_in,raw_uncmp)
     subprocess.run(cmd,shell=True)
 
-    cmd = 'fitexfilter {!s} | bzip2 -c > {!s}'.format(raw_uncmp,file_out)
+    # cmd = '/home/jp/rst/bin/fitfilter {!s} | bzip2 -c > {!s}'.format(raw_uncmp,file_out)
+    cmd = '/home/jp/rst/bin/fitfilter {!s} > {!s}'.format(raw_uncmp,file_out)
     subprocess.run(cmd,shell=True)
     
+    file_size = os.path.getsize(raw_uncmp)
+    print("file size of file in {}".format(file_size))
+    file_size = os.path.getsize(file_out)
+    print("file size of file out {}".format(file_size))
+
     os.remove(raw_uncmp)
 
 if __name__ == "__main__":
 
-    N_proc      = 60
+    N_proc      = 32
     sDate       = datetime.datetime(2010,1,1)
-    eDate       = datetime.datetime(2023,1,1)
+    eDate       = datetime.datetime(2024,1,1)
 
 #    radars      = ['pgr','sas','kap','gbr','cvw','cve','fhw','fhe','bks','wal']
-    radars      = None # Set to None to process all radars.
+    radars      = ['bks']
+    # radars      = None # Set to None to process all radars.
 
     print('Finding files to filter...')
-    to_be_processed = find_to_be_processed(sDate,eDate,radars=radars)
+    to_be_processed = find_to_be_processed(sDate,eDate,radars=radars,base_in='/media/hhd/superdarn',base_out='/media/hhd/superdarn_fitfilter')
     print('Total files to filter: {!s}\n'.format(len(to_be_processed)))
-
     generate_directories(to_be_processed)
 
     print('Filtering files...')

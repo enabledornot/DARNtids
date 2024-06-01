@@ -12,8 +12,15 @@ import multiprocessing
 import mstid
 from mstid import run_helper
 
-years = list(range(2010,2022))
-
+# years = list(range(2010,2023))
+# years = list(range(2010,2017))
+years = list(range(2017,2024))
+years = years + list(range(2010,2017))
+# print(years)
+# years = list(range(2019,2024))
+# years = [2019]
+# asdff
+# years = [2017, 2018]
 radars = []
 #radars.append('ade')
 #radars.append('adw')
@@ -41,17 +48,41 @@ radars = []
 #radars.append('wal')
 
 ## Standard North American Radars
-radars.append('cvw')
-radars.append('cve')
-radars.append('fhw')
-radars.append('fhe')
-radars.append('bks')
-radars.append('wal')
+# radars.append('cvw')
+# radars.append('cve')
+# radars.append('fhw')
+# radars.append('fhe')
+# radars.append('bks')
+# radars.append('wal')
 
-radars.append('sas')
-radars.append('pgr')
-radars.append('kap')
-radars.append('gbr')
+# radars.append('sas')
+# radars.append('pgr')
+# radars.append('kap')
+# radars.append('gbr')
+
+# # Southern Radars
+# radars.append('san')
+# radars.append('fir')
+# radars.append('tig')
+# radars.append('unw')
+# # buckland park
+# radars.append('bpk')
+
+# all southern radars
+radars.append('bpk')
+radars.append('dce')
+radars.append('dcn')
+radars.append('fir')
+radars.append('hal')
+radars.append('ker')
+radars.append('mcm')
+radars.append('sps')
+radars.append('san')
+radars.append('sys')
+radars.append('sye')
+radars.append('tig')
+radars.append('unw')
+radars.append('zho')
 
 db_name                     = 'mstid_GSMR_fitexfilter'
 base_dir                    = db_name
@@ -63,8 +94,10 @@ for year in years:
 #    dct['fovModel']                 = 'HALF_SLANT'
     dct['fovModel']                 = 'GS'
     dct['radars']                   = radars
-    dct['list_sDate']               = datetime.datetime(year,  11,1)
-    dct['list_eDate']               = datetime.datetime(year+1, 5,1)
+    # dct['list_sDate']               = datetime.datetime(year, 1, 1)
+    # dct['list_eDate']               = datetime.datetime(year+1, 1, 1)
+    dct['list_sDate']               = datetime.datetime(year,  1,1)
+    dct['list_eDate']               = datetime.datetime(year+1, 1,1)
 #    dct['list_sDate']               = datetime.datetime(2012,12,1)
 #    dct['list_eDate']               = datetime.datetime(2012,12,15)
     dct['hanning_window_space']     = False # Set to False for MSTID Index Calculation
@@ -74,20 +107,24 @@ for year in years:
     dct['data_path']                = os.path.join(base_dir,'mstid_index')
     dct['boxcar_filter']            = False
 #    dct['fitacf_dir']               = '/data/sd-data'
-    dct['fitacf_dir']               = '/data/sd-data_fitexfilter'
-    dct['rti_fraction_threshold']   = 0.5
+    dct['fitacf_dir']               = '/media/hhd/superdarn_fitexfilter'
+    dct['rti_fraction_threshold']   = 0.25
+    dct['slt_range']                = None                      # The range of solar times which the data is ran for
+                                                                # setting this to none runs all hours (it defaults to 6-18)
+    #dct['terminator_fraction_threshold'] = -0.1                 # Set to negative to ensure all dawn persentages are greater
+                                                                # then it
     dct_list                        = run_helper.create_music_run_list(**dct)
 
     mstid_index         = True
     new_list            = True      # Create a completely fresh list of events in MongoDB. Delete an old list if it exists.
-    recompute           = False     # Recalculate all events from raw data. If False, use existing cached pickle files.
+    recompute           = True     # Recalculate all events from raw data. If False, use existing cached pickle files.
     reupdate_db         = True 
 
-    music_process       = True
-    music_new_list      = True
-    music_reupdate_db   = True
+    music_process       = False
+    music_new_list      = False
+    music_reupdate_db   = False
 
-    nprocs              = 60
+    nprocs              = 32
     multiproc           = True
 
     # Classification parameters go here. ###########################################
@@ -133,7 +170,7 @@ for year in years:
 
         print('Plotting calendar plot...')
         calendar_output_dir = os.path.join(base_dir,'calendar')
-        mstid.calendar_plot(dct_list,db_name=db_name,output_dir=calendar_output_dir)
+        mstid.calendar_plot(dct_list,db_name=db_name,output_dir=calendar_output_dir,st_uts=range(0,24,2),fig_scale_y=0.8,fig_scale_x=1.5)
 
     # Run actual MUSIC Processing ##################################################
     if music_process:

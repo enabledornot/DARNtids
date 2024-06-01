@@ -456,10 +456,11 @@ def classify_none_events(mstid_list,db_name='mstid',mongo_port=27017,
             reject_message.append('No Terminator Fraction')
             good = False
         else:
-            if (item['terminator_fraction'] > terminator_fraction_threshold):
-                low_termin_fract    += 1
-                reject_message.append('High Terminator Fraction')
-                good = False
+            pass
+            # if (item['terminator_fraction'] >= terminator_fraction_threshold):
+            #     low_termin_fract    += 1
+            #     reject_message.append('High Terminator Fraction')
+            #     good = False
 
         if not good:
             bad_counter += 1

@@ -34,7 +34,7 @@ if not os.path.exists(log_dir):
 log_path = os.path.join(log_dir,os.path.basename(init_param_file)+'.log')
 with open(log_path,'w') as fl:
     fl.write('{!s}: Processing {!s}\n'.format(datetime.datetime.now(),init_param_file))
-logging.basicConfig(filename=log_path, encoding='utf-8', level=logging.WARN)
+# logging.basicConfig(filename=log_path, encoding='utf-8', level=logging.WARN)
 
 # Run MSTID/MUSIC processing.
 mstid.run_music_init_param_file(init_param_file)
